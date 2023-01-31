@@ -1,0 +1,145 @@
+package Chatrmi;
+
+import java.awt.EventQueue;
+import java.awt.Window;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
+
+import Chatrmi.Entities.User;
+import Chatrmi.Serveur.ServerIF;
+
+import javax.swing.JTextPane;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.awt.event.ActionEvent;
+import javax.swing.JScrollBar;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
+import java.awt.Color;
+
+public class Chat extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField textFieldMessage;
+	private Client client;
+	private String username;
+	private String url = "rmi://localhost/irisi";
+	private ServerIF server;
+	private JTextArea textArea;
+	private JTextArea textArea_1;
+	private JButton bttnExercice;
+	private JButton btnCours;
+	private JButton btnNewButton_3;
+	private User user;
+	/**
+	 * Create the frame.
+	 * @throws NotBoundException 
+	 * @throws RemoteException 
+	 * @throws MalformedURLException 
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
+	 */
+	public Chat(String username,User user) throws MalformedURLException, RemoteException, NotBoundException, ClassNotFoundException, SQLException {
+		server = (ServerIF) Naming.lookup(url);
+		this.username=username;
+		this.user=user;
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 751, 562);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		
+		
+		textFieldMessage = new JTextField(10);
+		textFieldMessage.setBounds(158, 475, 266, 19);
+		contentPane.add(textFieldMessage);
+		textFieldMessage.setColumns(10);
+		contentPane.setLayout(null);
+		
+		
+		textArea = new JTextArea(20,50);
+		textArea.setBounds(1, 1, 381, 364);
+		contentPane.add(textArea);
+		JScrollPane sp = new JScrollPane(textArea,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		sp.setBounds(87, 82, 423, 383);
+		getContentPane().add(sp);
+		
+		JButton envoyer = new JButton("envoyer");
+		envoyer.setBounds(434, 474, 85, 21);
+		envoyer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					client.sendMessage();
+	                textFieldMessage.setText("");
+				} catch (RemoteException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		contentPane.add(envoyer);
+		
+		bttnExercice = new JButton("Exercice");
+		bttnExercice.setBounds(87, 10, 85, 21);
+		contentPane.add(bttnExercice);
+		
+		btnCours = new JButton("Cours");
+		btnCours.setBounds(319, 10, 85, 21);
+		contentPane.add(btnCours);
+		
+		btnNewButton_3 = new JButton("Meet");
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton_3.setBounds(565, 10, 85, 21);
+		contentPane.add(btnNewButton_3);
+		
+		JTextArea ConnectedList = new JTextArea();
+		ConnectedList.setBackground(new Color(152, 251, 152));
+		ConnectedList.setBounds(565, 83, 151, 382);
+		contentPane.add(ConnectedList);
+		
+		JLabel LabelForMsg = new JLabel("message");
+		LabelForMsg.setBounds(87, 478, 61, 13);
+		contentPane.add(LabelForMsg);
+		
+		JLabel lblEtudiantsConnecter = new JLabel("Etudiants Connecter");
+		lblEtudiantsConnecter.setBounds(565, 60, 151, 13);
+		contentPane.add(lblEtudiantsConnecter);
+		client = new Client(server,username,textFieldMessage,textArea,ConnectedList,user);
+
+		String[] s = historique().split("/");
+		for(int i=0;i<s.length;i++) {
+			client.afficherMessage(s[i]);
+		}
+	}
+	
+	public String historique() throws SQLException, ClassNotFoundException {
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/e_learning_rmi", "root", "");
+        Statement stmt = conn.createStatement();
+        ResultSet res =stmt.executeQuery("select contenu_msg from message");
+       
+        String message="";
+        while(res.next()) {
+             message+=res.getString(1)+"/";
+        }
+        System.out.print("le msg est "+message);
+        conn.close();
+        return message;
+   	}
+}

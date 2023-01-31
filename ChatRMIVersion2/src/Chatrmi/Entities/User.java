@@ -1,0 +1,102 @@
+package Chatrmi.Entities;
+
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+import java.rmi.RemoteException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import Chatrmi.Model.dataUser;
+
+import Chatrmi.Client;
+
+public class User implements Serializable {
+    public int id;
+    public String name;
+    public String login;
+    public  String passwd;
+
+	public User( String name,int id, String login, String passw) {
+		// TODO Auto-generated constructor stub
+		this.id = id;
+        this.name = name;
+        this.login = login;
+        this.passwd = passwd;
+	}
+	
+	public  User() {
+
+    }
+	
+	   public void DeleteAmisFromSession(int id) throws SQLException, ClassNotFoundException {
+	        dataUser cs=new dataUser();
+	        cs.DeleteUserFromSession(id);
+
+	    }
+	    private void readObject(java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {
+	        id = (int) stream.readObject();
+	        name = (String) stream.readObject();
+	        login = (String) stream.readObject();
+	        passwd = (String) stream.readObject();
+	    }
+	    private void writeObject(ObjectOutputStream stream) throws IOException {
+	        stream.writeObject(id);
+	        stream.writeObject(name);
+	        stream.writeObject(login);
+	        stream.writeObject(passwd);
+	    }
+
+	    public User getEtudiantGuiByLoginAndPasswd(String text, String text1) throws SQLException, ClassNotFoundException, RemoteException {
+	       User etudiantGUI=new dataUser().getEtudiantGuiByLoginAndPasswd(text,text1);
+	        return etudiantGUI;
+	    }
+
+		public User getProfGuiByLoginAndPasswd(String text, String text2) throws ClassNotFoundException, RemoteException, SQLException {
+			 User etudiantGUI=new dataUser().getProfGuiByLoginAndPasswd(text,text2);
+		        return etudiantGUI;
+		        
+		}
+	
+//	
+//    public List<User> listAmisConnecter() throws SQLException, ClassNotFoundException {
+//        dataUser cs=new dataUser();
+//        User amis=new User();
+//        List<User> ListAmis = new ArrayList<>();
+//        List<Integer> ids=cs.getListAmisConnecter();
+//        for (Integer id:ids){
+//            amis=(new User().getUserById(id));
+//            ListAmis.add(amis);
+//        }
+//
+//        return  ListAmis;
+//    }
+ 
+//    public void addConnectAmis(User user) throws SQLException, ClassNotFoundException {
+//        dataUser cs=new dataUser();
+//        cs.AddUserToSession(user);
+//    }
+//    public List<Client> ListUsers() throws SQLException, ClassNotFoundException, RemoteException {
+//        dataUser co=new dataUser();
+//        return co.getListUser();
+//
+  //  } 
+public User getUserById(int id) throws SQLException, ClassNotFoundException {
+        dataUser co=new dataUser();
+        return co.getUser(id);
+    }
+//    public int getIdUser(String login,String mdp) throws SQLException, ClassNotFoundException {
+//        dataUser co=new dataUser();
+//        return co.getIdUser(login,mdp);
+//    }
+
+
+
+
+//
+//    public void retrieveMessage(String message) throws RemoteException {
+//        new EtudiantGUI().retrieveMessage(message);
+//    }
+}
+

@@ -1,0 +1,88 @@
+package Chatrmi;
+
+import java.awt.Cursor;
+import java.awt.TextArea;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+
+import Chatrmi.ClientIf;
+import Chatrmi.Entities.User;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.StyledDocument;
+
+import Chatrmi.Serveur.ServerIF;
+
+public class Client extends UnicastRemoteObject implements ClientIf{
+	private ServerIF server;
+    private String username;
+    private JTextField textField;
+    private JTextArea textArea;
+    private String blabla="";
+    private String clientconnecter="";
+    private TextArea ConnectedList;
+    private User user;
+    public Client(ServerIF server,String username,JTextField textField,JTextArea textArea,TextArea ConnectedList,User user) throws RemoteException{
+        this.username = username;
+        this.server = server;
+        this.textField = textField;
+        this.textArea = textArea;       
+        this.ConnectedList=ConnectedList;
+        this.user=user;
+  	    server.addClient(this,user.id);
+
+      refreach();
+    }
+    public void refreach() throws RemoteException {
+          for(String session:server.getClientConnecter()) {
+          	clientconnecter+=session+ "\n";
+          }
+          //clear
+          ConnectedList.selectAll();
+          
+          ConnectedList.append(clientconnecter);
+        
+
+    }
+    
+
+
+
+
+	@Override
+	public void afficherMessage(String message) throws RemoteException {
+		// TODO Auto-generated method stub
+		blabla += message + "\n";
+		System.out.print(message);
+		textArea.setText(blabla);
+	}
+
+	@Override
+	public void sendMessage() throws RemoteException {
+		try {
+			server.broadcastMessage(username + " : " + textField.getText());
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+	
+	
+	@Override
+	public void sendMessageFile(ArrayList<Integer> inc,String fileName) throws RemoteException {
+		server.broadcastMessageFile(inc,fileName);
+	}
+	
+
+
+}

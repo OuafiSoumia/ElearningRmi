@@ -1,0 +1,5 @@
+package Chatrmi;
+
+public interface ServerIF {
+
+}

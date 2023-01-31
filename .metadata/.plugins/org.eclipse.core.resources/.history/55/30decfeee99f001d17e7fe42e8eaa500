@@ -1,0 +1,96 @@
+package ProfChat;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import Chatrmi.Model.dataClass;
+
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import java.awt.Font;
+import java.awt.SystemColor;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.awt.event.ActionEvent;
+
+public class ajouterClasse extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField textIdEtd;
+	private JTextField TextForName;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					ajouterClasse frame = new ajouterClasse();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	
+	/**
+	 * Create the frame.
+	 */
+	public ajouterClasse() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Nom Classe : ");
+		lblNewLabel.setBackground(UIManager.getColor("Button.darkShadow"));
+		lblNewLabel.setBounds(35, 76, 106, 13);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lblid_Etudiant = new JLabel("id_Etudiant");
+		lblid_Etudiant.setBounds(35, 132, 78, 13);
+		contentPane.add(lblid_Etudiant);
+		
+		textIdEtd = new JTextField();
+		textIdEtd.setBounds(214, 129, 144, 19);
+		contentPane.add(textIdEtd);
+		textIdEtd.setColumns(10);
+		
+		TextForName = new JTextField();
+		TextForName.setColumns(10);
+		TextForName.setBounds(214, 73, 144, 19);
+		contentPane.add(TextForName);
+		
+		JLabel lblNewLabel_1 = new JLabel("Ajouter une classe");
+		lblNewLabel_1.setBackground(SystemColor.textHighlight);
+		lblNewLabel_1.setFont(new Font("Times New Roman", Font.BOLD, 12));
+		lblNewLabel_1.setBounds(134, 10, 130, 34);
+		contentPane.add(lblNewLabel_1);
+		
+		JButton bntAjouter = new JButton("Ajouter");
+		bntAjouter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					new dataClass().CreeClass(TextForName.getText(),Integer.parseInt(textIdEtd.getText()) );
+				} catch (NumberFormatException | ClassNotFoundException | SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		bntAjouter.setBounds(35, 190, 85, 21);
+		contentPane.add(bntAjouter);
+	}
+
+}

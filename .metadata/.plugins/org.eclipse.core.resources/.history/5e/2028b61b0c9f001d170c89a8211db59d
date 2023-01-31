@@ -1,0 +1,8 @@
+package Entities;
+
+public class ClassRoom {
+    private int numClass;
+    private String nomClass;
+    private int classmate;
+
+}

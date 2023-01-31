@@ -1,0 +1,118 @@
+package Chatrmi.autentification;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JButton;
+import javax.swing.JTextField;
+import javax.swing.ImageIcon;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.awt.event.ActionEvent;
+
+public class Register extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Register frame = new Register();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Register() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("userName");
+		lblNewLabel.setBounds(42, 74, 45, 13);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("password");
+		lblNewLabel_1.setBounds(42, 121, 45, 13);
+		contentPane.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("login");
+		lblNewLabel_2.setBounds(42, 175, 45, 13);
+		contentPane.add(lblNewLabel_2);
+		
+		JButton btnNewButton = new JButton("enregistrer");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+	             try {
+                     Connection con = null;
+                     ResultSet rs;
+                     Class.forName("com.mysql.cj.jdbc.Driver");
+                     con= DriverManager.getConnection("jdbc:mysql://localhost/chatreseau", "root","");
+                  //   Statement stmt=con.createStatement();//pour executer les requets sql
+                     String sql= "INSERT INTO utilisateur (username, login, passwd) VALUES ('"+textField.getText()+"','"+ textField_2.getText()+"','"+ textField_1.getText()+"');";
+                     PreparedStatement  preparedStatement = con.prepareStatement(sql);
+                     boolean ex=preparedStatement.execute();
+                     if (ex){
+                         JOptionPane.showMessageDialog(null, "le compte est cree avec succsses!");
+                     }
+                     else
+                         JOptionPane.showMessageDialog(null, "Connexion refusée!");
+
+                 }catch (SQLException | ClassNotFoundException e1) {
+                     e1.printStackTrace();
+                 }
+			}
+		});
+		btnNewButton.setBounds(97, 215, 85, 21);
+		contentPane.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("retour");
+		btnNewButton_1.setBounds(274, 215, 85, 21);
+		contentPane.add(btnNewButton_1);
+		
+		textField = new JTextField();
+		textField.setBounds(97, 71, 262, 19);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		textField_1.setBounds(97, 118, 262, 19);
+		contentPane.add(textField_1);
+		
+		textField_2 = new JTextField();
+		textField_2.setColumns(10);
+		textField_2.setBounds(97, 172, 262, 19);
+		contentPane.add(textField_2);
+		
+		JLabel lblNewLabel_3 = new JLabel("New label");
+		lblNewLabel_3.setIcon(new ImageIcon("C:\\Users\\soumi\\Desktop\\icon-register.png"));
+		lblNewLabel_3.setBounds(-33, -15, 520, 284);
+		contentPane.add(lblNewLabel_3);
+	}
+}

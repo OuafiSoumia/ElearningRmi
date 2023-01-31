@@ -1,0 +1,35 @@
+package Chatrmi;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+public class ChatServer extends UnicastRemoteObject implements ServerIF{
+	private ArrayList<ClientIf> clients=new ArrayList<ClientIf>();
+
+	protected ChatServer() throws RemoteException {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void broadcastMessage(String message) throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void disconnectClient(int id) throws RemoteException, SQLException, ClassNotFoundException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addClient(ClientIf client) throws RemoteException {
+		// TODO Auto-generated method stub
+		clients.add(client);
+		
+	}
+
+}

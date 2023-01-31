@@ -1,0 +1,113 @@
+package Chatrmi.Model;
+
+import Chatrmi.Client;
+import Chatrmi.Entities.User;
+
+import java.rmi.RemoteException;
+import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
+
+public class dataUser {
+    Connection con = null;
+
+    public List<Client> getListUser() throws ClassNotFoundException, SQLException, RemoteException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        con= DriverManager.getConnection("jdbc:mysql://localhost/chatreseau", "root","");
+        Statement statement = con.createStatement();
+        String requete = "SELECT * FROM utilisateur";
+        ResultSet result = statement.executeQuery(requete);
+        List<Client> objs = new LinkedList<>();
+        while (result.next()){
+
+         //   Client obj = new Client( result.getString("username"),result.getInt("id_user"),result.getString("login"),result.getString("passwd"));
+            objs.add(obj);
+        }
+        Client[] tab = new Client[objs.size()];
+        objs.toArray(tab);
+        return objs;
+    }
+    public User getUser(int id) throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        con= DriverManager.getConnection("jdbc:mysql://localhost/chatreseau", "root","");
+        Statement statement = con.createStatement();
+        String requete = "SELECT * FROM `utilisateur` where id_user='"+id+"';";
+        ResultSet result = statement.executeQuery(requete);
+
+        User obj = new User();
+        while (result.next()){
+            obj.id =  result.getInt("id_user");
+            obj.name = result.getString("username");
+            obj.login = result.getString("login");
+            obj.passwd = result.getString("passwd");
+        }
+
+
+        return obj;
+    }
+    public int getIdUser(String login,String mdp) throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        con= DriverManager.getConnection("jdbc:mysql://localhost/chatreseau", "root","");
+        Statement statement = con.createStatement();
+        String requete = "SELECT * FROM utilisateur where login='"+login+"' and passwd='"+mdp+"'";
+        ResultSet result = statement.executeQuery(requete);
+        int i=0;
+        while (result.next()){
+            System.out.println(result.getInt("id_user"));
+            i= result.getInt("id_user");
+        }
+        return i;
+    }
+
+    public List<Integer> getListAmisConnecter() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        con= DriverManager.getConnection("jdbc:mysql://localhost/chatreseau", "root","");
+        Statement statement = con.createStatement();
+        String requete = "SELECT * FROM session ";
+        ResultSet result = statement.executeQuery(requete);
+        List<Integer> id = new LinkedList<>();
+        while (result.next()){
+            id.add(result.getInt("id_userConnecter"));
+        }
+
+        return id;
+    }
+    public void AddUserToSession(User user) throws ClassNotFoundException, SQLException {
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        con= DriverManager.getConnection("jdbc:mysql://localhost/chatreseau", "root","");
+
+        String sql= "INSERT INTO `Session`(`id_userConnecter`) VALUES ('"+user.id+"');";
+        PreparedStatement preparedStatement = con.prepareStatement(sql);
+        boolean ex=preparedStatement.execute();
+
+
+    }
+    public void DeleteUserFromSession(int IdUser) throws ClassNotFoundException, SQLException {
+
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        con= DriverManager.getConnection("jdbc:mysql://localhost/chatreseau", "root","");
+
+        String sql= "delete  from  `Session` where `id_userConnecter`='"+IdUser+"'";
+
+        PreparedStatement preparedStatement = con.prepareStatement(sql);
+        boolean ex=preparedStatement.execute();
+
+
+    }
+
+    public Client getEtudiantGuiByLoginAndPasswd(String login, String mdp) throws ClassNotFoundException, SQLException, RemoteException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        con= DriverManager.getConnection("jdbc:mysql://localhost/chatreseau", "root","");
+        Statement statement = con.createStatement();
+        String requete = "SELECT * FROM utilisateur where login='"+login+"' and passwd='"+mdp+"'";
+        ResultSet result = statement.executeQuery(requete);
+        Client obj=null;
+        while (result.next()){
+            System.out.println(result.getInt("id_user"));
+          //   obj = new Client( result.getString("username"),result.getInt("id_user"),result.getString("login"),result.getString("passwd"));
+        }
+        return obj;
+    }
+}

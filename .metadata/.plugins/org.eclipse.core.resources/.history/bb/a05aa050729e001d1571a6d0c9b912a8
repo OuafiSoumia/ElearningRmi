@@ -1,0 +1,12 @@
+package Chatrmi;
+
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+public interface ClientIf extends Remote{
+    public void afficherMessage(String message) throws RemoteException;    
+    public void sendMessage() throws RemoteException;
+	void sendMessageFile() throws RemoteException;
+
+}
+

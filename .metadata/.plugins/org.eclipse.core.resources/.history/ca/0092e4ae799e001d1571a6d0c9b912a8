@@ -1,0 +1,77 @@
+package Chatrmi.Serveur;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import Chatrmi.Client;
+import Chatrmi.ClientIf;
+import Chatrmi.Entities.User;
+
+public class ChatServer extends UnicastRemoteObject implements ServerIF{
+	protected ChatServer() throws RemoteException {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
+	private ArrayList<ClientIf> clients=new ArrayList<ClientIf>();
+	public  ArrayList<Integer> listConnecter=new ArrayList<>();
+
+	
+	@Override
+	public void broadcastMessage(String message) throws RemoteException {
+		// TODO Auto-generated method stub
+		for(int i=0;i<clients.size();i++){
+			clients.get(i).afficherMessage(message);
+        }
+	}
+
+
+	@Override
+	public void broadcastMessageFile(ArrayList<Integer> inc, String fileName) {
+
+           
+            }
+	@Override
+	public void disconnectClient(int id) throws RemoteException, SQLException, ClassNotFoundException {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+	@Override
+	public void addClient(ClientIf client,int id) throws RemoteException {
+		// TODO Auto-generated method stub
+		clients.add(client);
+		listConnecter.add(id);
+		
+	}
+
+
+	@Override
+	public ArrayList<String> getClientConnecter() throws RemoteException {
+		// TODO Auto-generated method stub
+	  ArrayList<String> all=new ArrayList<String>();
+
+		for(Integer ids:listConnecter) {
+			try {
+				all.add(new User().getUserById(ids).name);
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return all;
+	}
+
+
+        
+
+	}
+
+

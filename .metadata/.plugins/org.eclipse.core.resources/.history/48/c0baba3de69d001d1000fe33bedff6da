@@ -1,0 +1,12 @@
+package Chatrmi;
+
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.sql.SQLException;
+
+public interface ServerIF extends Remote {
+    void broadcastMessage(String message) throws RemoteException;
+    void disconnectClient(int id) throws RemoteException, SQLException, ClassNotFoundException;
+
+   
+}

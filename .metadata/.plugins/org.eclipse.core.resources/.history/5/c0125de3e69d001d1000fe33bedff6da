@@ -1,0 +1,16 @@
+package Chatrmi;
+
+import java.rmi.Naming;
+import java.rmi.registry.LocateRegistry;
+
+public class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		ServerIF s = new ServerIF();
+        LocateRegistry.createRegistry(1099);
+        Naming.rebind("irisi",s);
+        System.out.println("Serveur Pret");
+	}
+
+}

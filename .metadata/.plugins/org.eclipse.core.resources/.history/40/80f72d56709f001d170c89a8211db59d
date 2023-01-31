@@ -1,0 +1,76 @@
+package Chatrmi.Paint;
+
+import java.awt.EventQueue;
+import java.awt.Graphics;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
+import java.awt.Canvas;
+
+public class form extends JFrame {
+
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					form frame = new form();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public form() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		Canvas canvas = new Canvas();
+		canvas.setBounds(0, 65, 448, 213);
+		contentPane.add(canvas);
+	        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        setTitle("Paint");
+	        pack();
+	        setVisible(true);
+	    }
+	
+	
+	private class DrawCanvas extends JPanel {
+        @Override
+        protected void paintComponent(Graphics g) { // called back via repaint()
+            super.paintComponent(g);
+            g.setColor(LINE_COLOR);
+            for (PolyLine line: lines) {
+                line.draw(g);
+            }
+        }
+    }
+	
+	
+	 // The entry main method
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            // Run the GUI codes on the Event-Dispatching thread for thread safety
+            @Override
+            public void run() {
+                new MyPaint(); // Let the constructor do the job
+            }
+        });
+    }
+}

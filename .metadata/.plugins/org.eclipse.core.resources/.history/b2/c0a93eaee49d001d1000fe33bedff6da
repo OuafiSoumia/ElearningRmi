@@ -1,0 +1,12 @@
+package Chatrmi;
+
+public interface ServerIF extends Remote {
+    void broadcastMessage(String message) throws RemoteException;
+    void disconnectClient(int id) throws RemoteException, SQLException, ClassNotFoundException;
+
+   // void setMsg(String msg) throws RemoteException, SQLException, ClassNotFoundException;
+    String getMsg() throws RemoteException, SQLException, ClassNotFoundException;
+   void getAllMsg(int id) throws RemoteException, SQLException, ClassNotFoundException;
+
+    void AddClientToChat(ClientIF clientIF) throws RemoteException, SQLException, ClassNotFoundException;
+}

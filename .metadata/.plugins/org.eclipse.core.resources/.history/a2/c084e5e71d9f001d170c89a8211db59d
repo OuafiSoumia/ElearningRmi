@@ -1,0 +1,37 @@
+package Chatrmi.Entities;
+
+import java.rmi.RemoteException;
+import java.sql.SQLException;
+import java.util.List;
+
+import Chatrmi.Client;
+import Chatrmi.Model.dataClass;
+import Chatrmi.Model.dataUser;
+
+public class ClassRoom {
+    private int numClass;
+    private String nomClass;
+    private int classmate;
+    
+    
+    public List<ClassRoom> ListUsers() throws SQLException, ClassNotFoundException, RemoteException {
+        dataClass co=new dataClass();
+        return co.getListClasses();
+
+    }
+
+
+	public ClassRoom(int numClass, String nomClass, int classmate) {
+		super();
+		this.numClass = numClass;
+		this.nomClass = nomClass;
+		this.classmate = classmate;
+	}
+	public ClassRoom() {
+		super();
+	
+	}
+
+    
+}
+
